@@ -1,0 +1,36 @@
+2024-01-17T06:57:17: PM2 log: ===============================================================================
+2024-01-17T06:57:17: PM2 log: --- New PM2 Daemon started ----------------------------------------------------
+2024-01-17T06:57:17: PM2 log: Time                 : Wed Jan 17 2024 06:57:17 GMT+0000 (Coordinated Universal Time)
+2024-01-17T06:57:17: PM2 log: PM2 version          : 5.3.0
+2024-01-17T06:57:17: PM2 log: Node.js version      : 18.14.2
+2024-01-17T06:57:17: PM2 log: Current arch         : x64
+2024-01-17T06:57:17: PM2 log: PM2 home             : /home/development/public_html/cofit/.pm2
+2024-01-17T06:57:17: PM2 log: PM2 PID file         : /home/development/public_html/cofit/.pm2/pm2.pid
+2024-01-17T06:57:17: PM2 log: RPC socket file      : /home/development/public_html/cofit/.pm2/rpc.sock
+2024-01-17T06:57:17: PM2 log: BUS socket file      : /home/development/public_html/cofit/.pm2/pub.sock
+2024-01-17T06:57:17: PM2 log: Application log path : /home/development/public_html/cofit/.pm2/logs
+2024-01-17T06:57:17: PM2 log: Worker Interval      : 30000
+2024-01-17T06:57:17: PM2 log: Process dump file    : /home/development/public_html/cofit/.pm2/dump.pm2
+2024-01-17T06:57:17: PM2 log: Concurrent actions   : 2
+2024-01-17T06:57:17: PM2 log: SIGTERM timeout      : 1600
+2024-01-17T06:57:17: PM2 log: ===============================================================================
+2024-01-20T04:44:22: PM2 log: pm2 has been killed by signal, dumping process list before exit...
+2024-01-20T04:44:23: PM2 log: Exited peacefully
+2024-02-02T07:18:32: PM2 log: ===============================================================================
+2024-02-02T07:18:32: PM2 log: --- New PM2 Daemon started ----------------------------------------------------
+2024-02-02T07:18:32: PM2 log: Time                 : Fri Feb 02 2024 07:18:32 GMT+0000 (Coordinated Universal Time)
+2024-02-02T07:18:32: PM2 log: PM2 version          : 5.3.0
+2024-02-02T07:18:32: PM2 log: Node.js version      : 18.14.2
+2024-02-02T07:18:32: PM2 log: Current arch         : x64
+2024-02-02T07:18:32: PM2 log: PM2 home             : /home/development/public_html/cofit/.pm2
+2024-02-02T07:18:32: PM2 log: PM2 PID file         : /home/development/public_html/cofit/.pm2/pm2.pid
+2024-02-02T07:18:32: PM2 log: RPC socket file      : /home/development/public_html/cofit/.pm2/rpc.sock
+2024-02-02T07:18:32: PM2 log: BUS socket file      : /home/development/public_html/cofit/.pm2/pub.sock
+2024-02-02T07:18:32: PM2 log: Application log path : /home/development/public_html/cofit/.pm2/logs
+2024-02-02T07:18:32: PM2 log: Worker Interval      : 30000
+2024-02-02T07:18:32: PM2 log: Process dump file    : /home/development/public_html/cofit/.pm2/dump.pm2
+2024-02-02T07:18:32: PM2 log: Concurrent actions   : 2
+2024-02-02T07:18:32: PM2 log: SIGTERM timeout      : 1600
+2024-02-02T07:18:32: PM2 log: ===============================================================================
+2024-02-03T03:52:52: PM2 log: pm2 has been killed by signal, dumping process list before exit...
+2024-02-03T03:52:52: PM2 log: Exited peacefully
