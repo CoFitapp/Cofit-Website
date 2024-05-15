@@ -1169,10 +1169,15 @@ span.tag-line {
   border-radius: 4px;
   overflow: hidden;
 }
-.gallery-main .gallery-inner .gallery-img:first-child {
+/* .gallery-main .gallery-inner .gallery-img:first-child {
   grid-row: span 2;
   height: 485px;
   width: 790px;
+} */
+.gallery-main .gallery-inner .gallery-img:first-child {
+  grid-row: span 2;
+  height: 382px;
+  width: 452px;
 }
 .gallery-main .gallery-inner .gallery-img img {
   height: 100%;
@@ -2340,7 +2345,7 @@ img.right-arrow{
   justify-content: space-between
 }
 span.MuiTypography-root.MuiTypography-span.date{
-  width: 105px;
+  width: 106px;
 }
 
 .all-events-inner.aboutUs {

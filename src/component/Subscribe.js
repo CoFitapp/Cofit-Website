@@ -2,8 +2,12 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-
+import { useLocation } from 'react-router-dom';
+import { Helmet } from "react-helmet";
 const SubscribePage = () => {
+  const location = useLocation();
+
+  const canonicalUrl = `${window.location.origin}${location.pathname}`;
   // useEffect(() => {
   //   // Create a script element
   //   const script = document.createElement('script');
@@ -29,6 +33,10 @@ const SubscribePage = () => {
 
   return (
     <React.Fragment>
+       <Helmet>
+                <link rel="canonical" id="canonicalLink" href={canonicalUrl} />
+
+            </Helmet>
       <Box className='banner-main coming' sx={{ backgroundImage: 'url("images/ComingSoon2.png")' }}>
       <Container className='site-container' sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box className='banner-content coming' sx={{ width: '50%' }}>

@@ -3,13 +3,20 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import { useLocation } from 'react-router-dom';
+import { Helmet } from "react-helmet";
 
 export default function TermsConditions() {
-   
+    const location = useLocation();
+
+  const canonicalUrl = `${window.location.origin}${location.pathname}`;
   
     return (
         <React.Fragment>
+        <Helmet>
+                <link rel="canonical" id="canonicalLink" href={canonicalUrl} />
 
+            </Helmet>
             <Box className='all-events-main'>
                 <Container className='site-container'>
                     <Box className='all-events-inner aboutUs terms'>

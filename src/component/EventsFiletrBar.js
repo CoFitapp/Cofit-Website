@@ -37,7 +37,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
 
-export default function EventsFiletrBar({ searchQuery, onSearchChange }) {
+export default function EventsFiletrBar({ searchQuery, onSearchChange, eventData= [], setEventData }) {
     const [age, setAge] = React.useState('');
 
     const handleChange = (event) => {
@@ -62,11 +62,20 @@ export default function EventsFiletrBar({ searchQuery, onSearchChange }) {
 
 
     const handleCategoryChange = (event) => {
-        setCategory(event.target.value);
+        const { value } = event.target;
+        console.log("Selected category value:", category);
+        console.log("All events data:", eventData);
+    
+        const filteredEvents = eventData.filter(eventItem =>
+            eventItem.event_category && eventItem.event_category === value
+        );
+        console.log("Filtered events:", filteredEvents);
+    
+        setEventData(filteredEvents);
+        setCategory(value); // Update the category state
     };
-
-
-
+    
+    
     const handleSearchChange = (event) => {
         const { value } = event.target;
         onSearchChange(value);
@@ -79,25 +88,25 @@ export default function EventsFiletrBar({ searchQuery, onSearchChange }) {
     const apiKey = 'UliYPibdvbwYfWNQJZaZx-9ax-g0YVZyOGCGB6B_ElQ';
     const latitude = 48.86926; // Example latitude
     const longitude = 2.3321; // Example longitude
-    
+
     const url = `https://geocode.search.hereapi.com/v1/geocode?q=*+at+${latitude},${longitude}&apiKey=${apiKey}`;
-    
+
     fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Handle the data containing all locations around the specified coordinates
-        console.log(data);
-        setLocations(data.items || []);
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-    
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Handle the data containing all locations around the specified coordinates
+            console.log(data);
+            setLocations(data.items || []);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+
 
 
 

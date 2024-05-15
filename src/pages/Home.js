@@ -11,8 +11,14 @@ import ReadyToFindSec from '../component/ReadyToFindSec';
 import GridImageSec from '../component/GridImageSec';
 import NewsArticlesSec from '../component/NewsArticlesSec';
 import Button from '@mui/material/Button';
+import { useLocation } from 'react-router-dom';
+import { Helmet } from "react-helmet";
 
 export default function Home(props) {
+    const location = useLocation();
+    const [eventData, setEventData] = useState([]);
+
+    const canonicalUrl = `${window.location.origin}${location.pathname}`;
     // const [eventData, setEventData] = useState([]);
     // const [loading, setLoading] = useState(true);
 
@@ -99,7 +105,10 @@ export default function Home(props) {
 
     return (
         <React.Fragment>
+            <Helmet>
+                <link rel="canonical" id="canonicalLink" href={canonicalUrl} />
 
+            </Helmet>
             {/* Banner Section */}
             <BannerSection />
 
@@ -111,11 +120,11 @@ export default function Home(props) {
                             All events
                         </Typography>
                         <Box className='filter-bar-main'>
-                            <EventsFiletrBar searchQuery={searchQuery} onSearchChange={handleSearchChange} />
+                            <EventsFiletrBar searchQuery={searchQuery} onSearchChange={handleSearchChange}  eventData={eventData} setEventData= {setEventData} />
                         </Box>
                         <Box className='events'>
                             <Box className='events-inner'>
-                                <SingleEvents currentPage={props.currentPage} pagination={props.pagination} searchQuery={searchQuery} SetTotalPages={props.SetTotalPages} />
+                                <SingleEvents currentPage={props.currentPage} pagination={props.pagination} searchQuery={searchQuery} SetTotalPages={props.SetTotalPages} eventData={eventData} setEventData= {setEventData}/>
                             </Box>
                             <Box className='pagination-main'>
                                 <Button
@@ -137,8 +146,8 @@ export default function Home(props) {
                                         {props.currentPage}
                                     </Typography>
                                     /
-                                    <Typography variant='span' component='span'>
-                                        {props.totalPages}
+                                    <Typography variant='span' component='span'>1
+                                        {/* {props.totalPages} */}
                                     </Typography>
                                 </Typography>
 
@@ -151,7 +160,9 @@ export default function Home(props) {
                                         props.handlePage("next");
                                     }}
                                     style={nextButtonStyle}
-                                    disabled={props.currentPage === props.totalPages}
+                                    // disabled={props.currentPage === props.totalPages}
+                                    disabled={props.currentPage === 1}
+
                                 >
                                     Next
                                 </Button>

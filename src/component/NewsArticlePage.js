@@ -9,6 +9,8 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import LatestEvents from '../component/LatestEvents';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useLocation } from 'react-router-dom';
+import { Helmet } from "react-helmet";
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -28,6 +30,10 @@ const Search = styled('div')(({ theme }) => ({
 
 
 export default function NewsArticlesPage() {
+    const location = useLocation();
+
+    const canonicalUrl = `${window.location.origin}${location.pathname}`;
+
     const [isImageLoaded, setIsImageLoaded] = useState(false);
 
     const handleImageLoad = () => {
@@ -64,7 +70,10 @@ export default function NewsArticlesPage() {
 
     return (
         <React.Fragment>
+            <Helmet>
+                <link rel="canonical" id="canonicalLink" href={canonicalUrl} />
 
+            </Helmet>
             <Box className='all-events-main'>
                 <Container className='site-container'>
                     <Box className='all-events-inner aboutUs blog-newss' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

@@ -15,8 +15,24 @@ import TermsConditions from "./component/TermsConditions";
 import PrivacyPolicy from "./component/PrivacyPolicy";
 import SubscribePage from "./component/Subscribe";
 import AllEvents from "./component/AllEvents";
+import Sitemap from './Sitemap';
 
 function App() {
+  // const [canonicalUrl, setCanonicalUrl] = useState('');
+
+  // useEffect(() => {
+  //   const currentPageUrl = window.location.href;
+  //   setCanonicalUrl(currentPageUrl);
+  // }, [window.location.href]); // Update when the window location changes
+  
+  // useEffect(() => {
+  //   const canonicalLink = document.getElementById('canonicalLink');
+  //   if (canonicalLink) {
+  //     canonicalLink.setAttribute('href', canonicalUrl);
+  //   }
+  // }, [canonicalUrl]); // Update when the canonical URL changes
+  
+
   useEffect(() => {
     const script = document.createElement('script');
     
@@ -37,7 +53,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [paginateState, setPaginateState] = useState("next")
-
+ 
   const handlePage = (action) => {
     if (action === "previous") {
         setCurrentPage(currentPage - 1);
@@ -59,13 +75,14 @@ function App() {
     console.log("Total pages here...",pages)
   }
   return (
+    <>
     <BrowserRouter>
       <AuthLayout>
         <Routes>
           {/* <Route path="/home" element={<Home handlePage={handlePage} currentPage={currentPage} pagination={pagination} SetTotalPages={SetTotalPages} totalPages={totalPages}/>}></Route> 
           <Route index element={<SubscribePage />}></Route> */}
           <Route index element={<Home handlePage={handlePage} currentPage={currentPage} pagination={pagination} SetTotalPages={SetTotalPages} totalPages={totalPages} />}></Route>
-          <Route path="/single-event/:id" element={<SingleEvent handlePage={handlePage} currentPage={currentPage} pagination={pagination} SetTotalPages={SetTotalPages} totalPages={totalPages} />} />
+          <Route path="/single-event/:slug" element={<SingleEvent handlePage={handlePage} currentPage={currentPage} pagination={pagination} SetTotalPages={SetTotalPages} totalPages={totalPages}  />} />
           <Route path="/browse-events" element={<BrowseEvents handlePage={handlePage} currentPage={currentPage} pagination={pagination} SetTotalPages={SetTotalPages} totalPages={totalPages} paginateState={paginateState} />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/news-articles" element={<NewsArticlePage />} />
@@ -73,9 +90,13 @@ function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/subscribe-page" element={<SubscribePage />} />
           <Route path="/all-events" element={<AllEvents />} />
+          <Route path="/all-events" element={<AllEvents />} />
+          
         </Routes>
       </AuthLayout>
     </BrowserRouter>
+      {/* <link rel="canonical" id="canonicalLink" href={canonicalUrl} /> */}
+  </>
   );
 }
 

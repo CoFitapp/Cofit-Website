@@ -50,3 +50,20 @@ npm start
 ls -la
 ls -la
 ls -al
+cd ../
+l
+ls
+ls
+ls
+cd node
+ls
+cd include/
+ls
+cd ../share/
+ls
+sudo -i
+bash
+ls
+git status
+ls
+bash

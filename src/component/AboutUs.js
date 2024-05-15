@@ -4,15 +4,18 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import { Helmet } from "react-helmet";
 
 export default function AboutUs() {
     const [positiveExpanded, setPositiveExpanded] = useState(false);
     const [negativeExpanded1, setNegativeExpanded1] = useState(false);
     const [negativeExpanded2, setNegativeExpanded2] = useState(false);
     const [negativeExpanded3, setNegativeExpanded3] = useState(false);
+    const location = useLocation();
 
+    const canonicalUrl = `${window.location.origin}${location.pathname}`;
     const scrollToTop = () => {
         window.scrollTo({
           top: 0,
@@ -38,7 +41,10 @@ export default function AboutUs() {
   
     return (
         <React.Fragment>
+            <Helmet>
+                <link rel="canonical" id="canonicalLink" href={canonicalUrl} />
 
+            </Helmet>
             <Box className='all-events-main'>
                 <Container className='site-container'>
                     <Box className='all-events-inner aboutUs'>
