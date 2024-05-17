@@ -24,9 +24,10 @@ export default function SingleEvent(props) {
     const canonicalUrl = `${window.location.origin}${location.pathname}`;
     console.log("Canonical URL:", canonicalUrl);
     const [loading, setLoading] = useState(true);
+    const [events, setEvents] = useState([]);
 
     const [eventData, setEventData] = useState([]);
-
+    const [eventData2, setEventData2] = useState([]);
     const handleSearchChange = (query) => {
         setSearchQuery(query);
     };
@@ -36,10 +37,10 @@ export default function SingleEvent(props) {
         axios.get(`/api/event-details/${slug}`)
             .then(response => {
                 console.log('API Response:', response); // Log the entire API response
-                setEventData(response.data.events);
+                setEvents(response.data.events);
                 setLoading(false);
                 let slug = response.data.events.event.slug;
-                console.log("eventData API", eventData)
+                console.log("eventData API", events)
                 // If slug doesn't exist, create it from the title
                 if (!slug) {
                     // Create slug from title
@@ -65,9 +66,9 @@ export default function SingleEvent(props) {
     // }
     
 
-    const description = eventData?.description || '';
+    const description = events?.description || '';
     // const address = eventData?.address || '';
-    const address = (eventData && eventData.address && eventData.address.length > 0) ? eventData.address[0] : '';
+    const address = (events && events.address && events.address.length > 0) ? events.address[0] : '';
 
     const wordLimit = 100;
     console.log("description", description);
@@ -85,9 +86,9 @@ export default function SingleEvent(props) {
 
 
     console.log("eventData?.event?.date?.start_date", eventData)
-    const image = eventData?.image || '../images/CoFit-Image-Not-Found-1.jpg';
-    const title = eventData?.title || '';
-    const startDateString = eventData?.date?.start_date || '';
+    const image = events?.image || '../images/CoFit-Image-Not-Found-1.jpg';
+    const title = events?.title || '';
+    const startDateString = events?.date?.start_date || '';
     console.log("image", image)
     const startDate = new Date(startDateString);
 
@@ -126,7 +127,8 @@ export default function SingleEvent(props) {
     console.log("eventData22222222", eventData)
     const addressParts = address.split(',').map(part => part.trim());
     const locality = addressParts[addressParts.length - 1];
-    
+    console.log("eventData?.link", events?.link)
+  
 
     return (
         <React.Fragment>
@@ -245,19 +247,18 @@ export default function SingleEvent(props) {
                                                 Event date
                                             </Typography>
                                             <Typography variant='span' component='span' className='full-date'>
-                                                {eventData?.event?.date?.start_date}
+                                                {events?.event?.date?.start_date}
                                             </Typography>
                                         </Box>
                                     </Box>
                                     <Box className='descrip'>
                                         <Typography variant='p' component='p' className='desc'>
-                                            Grab your spot now and save 10%! Lace up and join us for an amazing running experience. Don't miss out - book today!
-                                        </Typography>
+                                        {firstHalf}   {secondHalf}                                      </Typography>
                                     </Box>
                                     <Box className='location'>
                                         <Typography variant='a' component='a' className='loc' href='#' target='_blank'>
-                                            {eventData?.event?.event_location_map && eventData?.event?.event_location_map?.link ? (
-                                                <a href={eventData?.event?.event_location_map?.link} target="_blank" rel="noopener noreferrer">
+                                            {events?.event?.event_location_map && events?.event?.event_location_map?.link ? (
+                                                <a href={events?.event?.event_location_map?.link} target="_blank" rel="noopener noreferrer">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none">
                                                         <path d="M6.88824 9.00963C8.12026 9.00963 9.11901 8.01089 9.11901 6.77887C9.11901 5.54685 8.12026 4.5481 6.88824 4.5481C5.65622 4.5481 4.65747 5.54685 4.65747 6.77887C4.65747 8.01089 5.65622 9.00963 6.88824 9.00963Z" stroke="#5870FF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
                                                         <path d="M12.4649 6.77883C12.4649 11.7981 6.88796 15.7019 6.88796 15.7019C6.88796 15.7019 1.31104 11.7981 1.31104 6.77883C1.31104 5.29974 1.8986 3.88122 2.94448 2.83535C3.99035 1.78947 5.40887 1.2019 6.88796 1.2019C8.36705 1.2019 9.78556 1.78947 10.8314 2.83535C11.8773 3.88122 12.4649 5.29974 12.4649 6.77883V6.77883Z" stroke="#5870FF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
@@ -279,7 +280,7 @@ export default function SingleEvent(props) {
                                                 <path d="M2 8.4519H14" stroke="#4457FF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
                                                 <path d="M8 14.2893C9.38071 14.2893 10.5 11.6757 10.5 8.45176C10.5 5.2278 9.38071 2.61426 8 2.61426C6.61929 2.61426 5.5 5.2278 5.5 8.45176C5.5 11.6757 6.61929 14.2893 8 14.2893Z" stroke="#4457FF" stroke-width="1.2" stroke-miterlimit="10" />
                                             </svg>
-                                            www.fitnessup.com
+                                            {events?.link}
                                         </Typography>
                                     </Box>
                                     <Box className='hosted-by'>
@@ -301,8 +302,8 @@ export default function SingleEvent(props) {
                                 <Box className='map-main'>
                                     <Box className='map-title'>
                                         <Box className='icon'>
-                                            {eventData?.event?.event_location_map && eventData?.event?.event_location_map?.link ? (
-                                                <a href={eventData?.event?.event_location_map?.link} target="_blank" rel="noopener noreferrer">
+                                            {events?.event?.event_location_map && events?.event?.event_location_map?.link ? (
+                                                <a href={events?.event?.event_location_map?.link} target="_blank" rel="noopener noreferrer">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
                                                         <rect x="0.666626" y="0.666748" width="34.6667" height="34.6667" rx="4" fill="#FFEFF0" />
                                                         <path d="M6.83326 14.7513L6.83326 14.751C6.83676 11.7903 8.01446 8.95182 10.108 6.85825C12.2014 4.7649 15.0395 3.58722 17.9999 3.5835C20.9604 3.58722 23.7985 4.7649 25.8918 6.85825C27.9854 8.95182 29.1631 11.7903 29.1666 14.751V14.7512C29.1701 17.1677 28.3807 19.5187 26.9196 21.4434L26.8446 21.5423L26.844 21.5441L26.7521 21.6639C26.7086 21.7205 26.6642 21.7782 26.6279 21.8251L26.582 21.884C26.5726 21.896 26.5675 21.9023 26.5657 21.9046C26.5657 21.9046 26.5657 21.9047 26.5656 21.9047L17.9999 32.0071L9.43406 21.9048L9.43407 21.9048L9.43075 21.9009C9.43114 21.9014 9.43033 21.9004 9.42824 21.8977C9.422 21.8899 9.40433 21.8677 9.37269 21.827C9.33633 21.7802 9.29194 21.7225 9.2484 21.6657C9.20501 21.6091 9.16317 21.5542 9.13213 21.5135L9.09497 21.4647L9.08472 21.4512L9.08207 21.4477L9.0814 21.4468L9.0813 21.4467L9.08124 21.4466L9.08121 21.4466C7.61941 19.5209 6.82972 17.1689 6.83326 14.7513ZM23.0833 14.7511V14.7502C23.0833 13.7448 22.7851 12.762 22.2266 11.926C21.668 11.0901 20.8741 10.4385 19.9452 10.0538C19.0164 9.66903 17.9943 9.56836 17.0082 9.7645C16.0222 9.96065 15.1164 10.4448 14.4055 11.1557C13.6946 11.8666 13.2104 12.7724 13.0143 13.7585C12.8181 14.7445 12.9188 15.7666 13.3035 16.6955C13.6883 17.6243 14.3398 18.4182 15.1758 18.9768C16.0117 19.5354 16.9945 19.8335 17.9999 19.8335H18.0009C19.3483 19.8318 20.64 19.2958 21.5928 18.343C22.5456 17.3903 23.0816 16.0985 23.0833 14.7511Z" fill="white" stroke="#E25F3C" stroke-width="1.5" />
@@ -322,8 +323,8 @@ export default function SingleEvent(props) {
                                         </Box>
                                     </Box>
                                     <Box className='map'>
-                                        {eventData?.event?.event_location_map && eventData?.event?.event_location_map.link ? (
-                                            <a href={eventData?.event?.event_location_map?.link} target="_blank" rel="noopener noreferrer">
+                                        {events?.event?.event_location_map && events?.event?.event_location_map.link ? (
+                                            <a href={events?.event?.event_location_map?.link} target="_blank" rel="noopener noreferrer">
                                                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.3531447501646!2d-122.4072144246497!3d37.78176291175828!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808580812ab3d88d%3A0x94d2e15f9bb288bb!2sHoward%20St%2C%20San%20Francisco%2C%20CA%2C%20USA!5e0!3m2!1sen!2sin!4v1704970781066!5m2!1sen!2sin" width="372" height="400" sx={{ border: 'none' }} allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Google Maps Embedded Location"></iframe>
                                             </a>
                                         ) : (
@@ -349,7 +350,9 @@ export default function SingleEvent(props) {
                     </Box>
                     <Box className='events'>
                         <Box className='events-inner'>
-                            <SingleEvents currentPage={props.currentPage} pagination={props.pagination} searchQuery={searchQuery} SetTotalPages={props.SetTotalPages} eventData={props.eventData} eventId={eventId} />
+                            {/* <SingleEvents currentPage={props.currentPage} pagination={props.pagination} searchQuery={searchQuery} SetTotalPages={props.SetTotalPages} eventData={props.eventData} eventId={eventId} /> */}
+                            {/* <SingleEvents searchQuery={searchQuery} eventData2={eventData2} setEventData2 = {setEventData2} /> */}
+                            <SingleEvents currentPage={props.currentPage} pagination={props.pagination} searchQuery={searchQuery} SetTotalPages={props.SetTotalPages} eventData={eventData} setEventData= {setEventData} eventData2={eventData2} setEventData2= {setEventData2} />
                             {/* <SingleEvents /> */}
                         </Box>
                     </Box>
@@ -360,9 +363,9 @@ export default function SingleEvent(props) {
                {
                  "@context": "https://schema.org",
                  "@type": "Event",
-                 "name": "${eventData.title}",
-                 "startDate": "${eventData.date && eventData.date.start_date ? new Date(eventData.date.start_date).toISOString() : ''}", 
-                 "endDate": "${eventData.endDate ? new Date(eventData.endDate).toISOString() : ''}", 
+                 "name": "${events.title}",
+                 "startDate": "${events.date && events.date.start_date ? new Date(events.date.start_date).toISOString() : ''}", 
+                 "endDate": "${events.endDate ? new Date(events.endDate).toISOString() : ''}", 
                  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
                  "eventStatus": "https://schema.org/EventScheduled",
                  "location": {
@@ -388,7 +391,7 @@ export default function SingleEvent(props) {
                  "organizer": {
                    "@type": "Organization",
                    "name": "Leslie",
-                   "link": ${eventData?.event?.link ? `"url": "${eventData.event.link}"` : `"https://cofitapp.com"`}
+                   "link": ${events?.event?.link ? `"url": "${events.event.link}"` : `"https://cofitapp.com"`}
                 }
                }
              `}

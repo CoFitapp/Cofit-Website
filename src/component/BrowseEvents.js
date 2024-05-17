@@ -63,7 +63,7 @@ function EventCarouselItem({ event, handleTitleClick, eventData }) {
             </Box>
           </Box>
           <Box className='explore-event'>
-          <Link to={`/single-event/${event.events.slug}`} onClick={() => handleTitleClick(event.id)} className='title link-title' style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to={`/single-event/${event.events.slug}`} onClick={() => handleTitleClick(event.id)} className='title link-title' style={{ textDecoration: 'none', color: 'inherit' }}>
               Explore event
             </Link>
 
@@ -122,7 +122,7 @@ function EventCarousel({ events, sliderRef, handleNext, handlePrev, handleTitleC
 
   return (
     <>
-      
+
       <Slider {...settings} ref={sliderRef}>
 
         {events.map((event, index) => (
@@ -146,6 +146,7 @@ export default function BrowseEvents(props) {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [eventData, setEventData] = useState([]);
+  const [eventData2, setEventData2] = useState([]);
   const navigate = useNavigate();
 
   const handleSearchChange = (query) => {
@@ -169,30 +170,30 @@ export default function BrowseEvents(props) {
   const handleTitleClick = (id, slug) => {
     console.log(`/api/event-details/${slug}`);
     axios.get(`/api/event-details/${slug}`)
-        .then(response => {
-            const eventData = response.events;
-            let eventSlug = eventData.event.slug;
+      .then(response => {
+        const eventData = response.events;
+        let eventSlug = eventData.event.slug;
 
-            // If slug doesn't exist, create it from the title
-            if (!eventSlug) {
-                // Create slug from title
-                eventSlug = eventData.event.title
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]/g, '-')
-                    .replace(/-{2,}/g, '-')
-                    .replace(/^-|-$/g, '');
-                eventData.event.slug = eventSlug; // Update eventData with the new slug
-            }
+        // If slug doesn't exist, create it from the title
+        if (!eventSlug) {
+          // Create slug from title
+          eventSlug = eventData.event.title
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, '-')
+            .replace(/-{2,}/g, '-')
+            .replace(/^-|-$/g, '');
+          eventData.event.slug = eventSlug; // Update eventData with the new slug
+        }
 
-            console.log("slug new", eventSlug);
-            navigate(`/single-event/${eventSlug}`, { state: { eventData } });
+        console.log("slug new", eventSlug);
+        navigate(`/single-event/${eventSlug}`, { state: { eventData } });
 
-        })
-        .catch(error => {
-            console.error('Error fetching event details:', error);
-        });
+      })
+      .catch(error => {
+        console.error('Error fetching event details:', error);
+      });
     console.log("eventData new", eventData)
-};
+  };
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -203,10 +204,11 @@ export default function BrowseEvents(props) {
         console.log("response data", response.data.events);
 
         // Access the events data
-        const eventData = response.data.events; // Check the structure of response.data
+        const eventDataResponse = response.data.events; // Check the structure of response.data
 
-        if (eventData) {
-          setEvents(eventData);
+        if (eventDataResponse) {
+          setEvents(eventDataResponse);
+          setEventData(eventDataResponse);
         }
       } catch (error) {
         console.error('Error fetching events:', error);
@@ -249,13 +251,13 @@ export default function BrowseEvents(props) {
       borderRadius: '4px',
       border: '1px solid #1C1F23',
     };
-
+  console.log("eventData", eventData)
   return (
     <React.Fragment>
-        <Helmet>
-                <link rel="canonical" id="canonicalLink" href={canonicalUrl} />
+      <Helmet>
+        <link rel="canonical" id="canonicalLink" href={canonicalUrl} />
 
-            </Helmet>
+      </Helmet>
       <Box className='all-events-main'>
         <Container className='site-container'>
           <Box className='all-events-inner brows'>
@@ -289,11 +291,11 @@ export default function BrowseEvents(props) {
               All events
             </Typography>
             <Box className='filter-bar-main'>
-              <EventsFiletrBar searchQuery={searchQuery} onSearchChange={handleSearchChange} />
+              <EventsFiletrBar searchQuery={searchQuery} onSearchChange={handleSearchChange} eventData={eventData} setEventData= {setEventData} eventData2={eventData2} setEventData2= {setEventData2} />
             </Box>
             <Box className='events'>
               <Box className='events-inner'>
-                <SingleEvents currentPage={props.currentPage} pagination={props.pagination} searchQuery={searchQuery} SetTotalPages={props.SetTotalPages} paginateState={props.paginateState} handleTitleClick={handleTitleClick} />
+              <SingleEvents currentPage={props.currentPage} pagination={props.pagination} searchQuery={searchQuery} SetTotalPages={props.SetTotalPages} eventData={eventData} setEventData= {setEventData} eventData2={eventData2} setEventData2= {setEventData2} />
               </Box>
               <Box className='pagination-main'>
                 <Button variant="contained" className='custom-buttn main w-bg' onClick={() => { scrollToSection('single-events'); props.handlePage("previous") }}
@@ -308,15 +310,16 @@ export default function BrowseEvents(props) {
                     {props.currentPage}
                   </Typography>
                   /
-                  <Typography variant='span' component='span'>
-                    {props.totalPages}
+                  <Typography variant='span' component='span'>1
+                    {/* {props.totalPages} */}
                   </Typography>
                 </Typography>
 
                 <Link to="/browse-events">
                   <Button variant="contained" className='custom-buttn main next' onClick={() => { scrollToSection('single-events'); props.handlePage("next"); }}
                     style={nextButtonStyle}
-                    disabled={props.currentPage === props.totalPages}
+                    // disabled={props.currentPage === props.totalPages}
+                    disabled={props.currentPage === 1}
                   >
                     Next
                   </Button>

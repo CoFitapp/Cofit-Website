@@ -17,6 +17,7 @@ import { Helmet } from "react-helmet";
 export default function Home(props) {
     const location = useLocation();
     const [eventData, setEventData] = useState([]);
+    const [eventData2, setEventData2] = useState([]);
 
     const canonicalUrl = `${window.location.origin}${location.pathname}`;
     // const [eventData, setEventData] = useState([]);
@@ -102,7 +103,7 @@ export default function Home(props) {
             borderRadius: '4px',
             border: '1px solid #1C1F23',
         };
-
+console.log("eventData Home", eventData)
     return (
         <React.Fragment>
             <Helmet>
@@ -120,11 +121,11 @@ export default function Home(props) {
                             All events
                         </Typography>
                         <Box className='filter-bar-main'>
-                            <EventsFiletrBar searchQuery={searchQuery} onSearchChange={handleSearchChange}  eventData={eventData} setEventData= {setEventData} />
+                            <EventsFiletrBar searchQuery={searchQuery} onSearchChange={handleSearchChange}  eventData={eventData} setEventData= {setEventData} eventData2={eventData2} setEventData2= {setEventData2} />
                         </Box>
                         <Box className='events'>
                             <Box className='events-inner'>
-                                <SingleEvents currentPage={props.currentPage} pagination={props.pagination} searchQuery={searchQuery} SetTotalPages={props.SetTotalPages} eventData={eventData} setEventData= {setEventData}/>
+                                <SingleEvents currentPage={props.currentPage} pagination={props.pagination} searchQuery={searchQuery} SetTotalPages={props.SetTotalPages} eventData={eventData} setEventData= {setEventData} eventData2={eventData2} setEventData2= {setEventData2} />
                             </Box>
                             <Box className='pagination-main'>
                                 <Button

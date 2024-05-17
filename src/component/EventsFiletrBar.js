@@ -37,7 +37,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
 
-export default function EventsFiletrBar({ searchQuery, onSearchChange, eventData= [], setEventData }) {
+export default function EventsFiletrBar({ searchQuery, onSearchChange, eventData, setEventData, eventData2, setEventData2 }) {
     const [age, setAge] = React.useState('');
 
     const handleChange = (event) => {
@@ -60,22 +60,27 @@ export default function EventsFiletrBar({ searchQuery, onSearchChange, eventData
     }, []);
 
 
-
     const handleCategoryChange = (event) => {
-        const { value } = event.target;
-        console.log("Selected category value:", category);
-        console.log("All events data:", eventData);
-    
-        const filteredEvents = eventData.filter(eventItem =>
-            eventItem.event_category && eventItem.event_category === value
-        );
-        console.log("Filtered events:", filteredEvents);
-    
+        const categoryId = event.target.value;
+        const selectedCategory = categories.filter(category => category.id === categoryId);
+
+        if (selectedCategory.length > 0) {
+            console.log("Selected categories:", selectedCategory.map(cat => cat.category).join(", "));
+        } else {
+            console.log("Category not found for id:", categoryId);
+        }
+
+        const filteredEvents = eventData2.events ? eventData2.events.filter(eventItem => {
+            return selectedCategory.some(cat => eventItem.events.event_category === cat.category);
+        }) : [];
+
         setEventData(filteredEvents);
-        setCategory(value); // Update the category state
+        setCategory(categoryId);
     };
-    
-    
+
+
+
+
     const handleSearchChange = (event) => {
         const { value } = event.target;
         onSearchChange(value);

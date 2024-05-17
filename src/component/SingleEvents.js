@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const SingleEvents = ({ eventData, setEventData, currentPage, pagination, searchQuery, SetTotalPages }) => {
+const SingleEvents = ({ eventData, setEventData, currentPage, pagination, searchQuery, SetTotalPages, eventData2, setEventData2 }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const isMounted = useRef(true);
@@ -18,6 +18,8 @@ const SingleEvents = ({ eventData, setEventData, currentPage, pagination, search
         setCategory(event.target.value);
     };
 
+
+    console.log('(location.pathname', location.pathname)
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -45,6 +47,8 @@ const SingleEvents = ({ eventData, setEventData, currentPage, pagination, search
                 const offset = (page - 1) * limit;
                 const response = await axios.post('/api/get-event', { page, limit, offset, searchQuery });
                 setEventData(response.data);
+                setEventData2(response.data);
+
                 SetTotalPages(response.data.totalPages);
 
                 let eventsToDisplay;
@@ -59,6 +63,7 @@ const SingleEvents = ({ eventData, setEventData, currentPage, pagination, search
 
                 setEventData(eventsToDisplay);
                 setLoading(false);
+                console.log("eventsToDisplay", eventsToDisplay)
             } catch (error) {
                 console.error('Error fetching event data:', error);
                 setLoading(false);
@@ -72,30 +77,34 @@ const SingleEvents = ({ eventData, setEventData, currentPage, pagination, search
         };
     }, [currentPage, limit, pagination, searchQuery, category, SetTotalPages]);
 
-    const filteredEvents = eventData.filter((event) => {
+    console.log("eventData2 single", eventData2);
+
+    const filteredEvents = Array.isArray(eventData) ? eventData.filter((event) => {
         const titleMatch = event.events.title && event.events.title.toLowerCase().includes((searchQuery || '').toLowerCase());
         const descriptionMatch = event.events.description && event.events.description.toLowerCase().includes((searchQuery || '').toLowerCase());
         return titleMatch || descriptionMatch;
-    });
+    }) : [];
+
+
 
     const handleTitleClick = (id, slug) => {
         console.log(`/api/event-details/${slug}`);
         axios.get(`/api/event-details/${slug}`)
             .then(response => {
-                const eventData = response.events;
-                let eventSlug = eventData.event.slug;
+                const eventData = response.data.events; // Corrected: response.data.events
+                let eventSlug = eventData.slug; // Corrected: eventData.slug
 
                 if (!eventSlug) {
-                    eventSlug = eventData.event.title
+                    eventSlug = eventData.title
                         .toLowerCase()
                         .replace(/[^a-z0-9]/g, '-')
                         .replace(/-{2,}/g, '-')
                         .replace(/^-|-$/g, '');
-                    eventData.event.slug = eventSlug;
+                    eventData.slug = eventSlug;
                 }
 
                 console.log("slug new", eventSlug);
-                navigate(`/single-event/${eventSlug}`, { state: { eventData } });
+                // navigate(`/single-event/${eventSlug}`, { state: { eventData } });
 
             })
             .catch(error => {
@@ -132,59 +141,34 @@ const SingleEvents = ({ eventData, setEventData, currentPage, pagination, search
     return (
         <React.Fragment>
             {loading ? (
-               <Box
-               display="flex"
-               justifyContent="center"
-               alignItems="center"
-               minHeight="50vh"
-               minWidth="50vw" // Ensure the container occupies the full viewport width
-             >
-               <CircularProgress />
-             </Box>
-             
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    minHeight="50vh"
+                    minWidth="50vw" // Ensure the container occupies the full viewport width
+                >
+                    <CircularProgress />
+                </Box>
+
             ) : (
                 filteredEvents.map(event => (
                     <Box key={event.events.id} className='event-box box'>
 
                         <Box className='image'>
                             {event.events.image ? (
-                                <Link to={`/single-event/${event.events.slug || event.events.title?.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-{2,}/g, '-').replace(/^-|-$/g, '')}`} onClick={() => handleTitleClick(event.id, event.events.slug)}>
+                                <Link to={`/single-event/${event.events.slug || event.events.title?.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-{2,}/g, '-').replace(/^-|-$/g, '')}`} onClick={() => handleTitleClick(event.id, event.events.slug, event.slug)}>
                                     <img src={getImageUrl(event)} alt='' />
                                 </Link>
                             ) : (
-                                <Link to={`/single-event/${event.events.slug || event.events.title?.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-{2,}/g, '-').replace(/^-|-$/g, '')}`} onClick={() => handleTitleClick(event.id, event.events.slug)}>
+                                <Link to={`/single-event/${event.events.slug || event.events.title?.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-{2,}/g, '-').replace(/^-|-$/g, '')}`} onClick={() => handleTitleClick(event.id, event.events.slug, event.slug)}>
                                     <a href="#back-events">
-                                    <img
-                                        src={getImageUrl(event)}
-                                        alt=''
-                                    /></a>
+                                        <img
+                                            src={getImageUrl(event)}
+                                            alt=''
+                                        /></a>
                                 </Link>
                             )}
-
-
-                            {/* <Box className='mi-count'>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <g clip-path="url(#clip0_96_1603)">
-                                <path d="M2.66663 6.66659C2.66663 4.15243 2.66663 2.89535 3.44767 2.1143C4.22872 1.33325 5.4858 1.33325 7.99996 1.33325C10.5141 1.33325 11.7712 1.33325 12.5522 2.1143C13.3333 2.89535 13.3333 4.15243 13.3333 6.66659V7.99992C13.3333 10.5141 13.3333 11.7712 12.5522 12.5522C11.7712 13.3333 10.5141 13.3333 7.99996 13.3333C5.4858 13.3333 4.22872 13.3333 3.44767 12.5522C2.66663 11.7712 2.66663 10.5141 2.66663 7.99992V6.66659Z" stroke="white" />
-                                <path d="M2.66663 8.66675H13.3333" stroke="white" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M10.3334 10.6667H11.3334" stroke="white" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M4.66663 10.6667H5.66663" stroke="white" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M4 13V14C4 14.3682 4.29848 14.6667 4.66667 14.6667H5.66667C6.03486 14.6667 6.33333 14.3682 6.33333 14V13.3333" stroke="white" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M12 13V14C12 14.3682 11.7015 14.6667 11.3333 14.6667H10.3333C9.9651 14.6667 9.66663 14.3682 9.66663 14V13.3333" stroke="white" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M13.3334 6H14C14.3682 6 14.6667 6.29848 14.6667 6.66667V7.33333C14.6667 7.54317 14.5679 7.74076 14.4 7.86667L13.3334 8.66667" stroke="white" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M2.66671 6H2.00004C1.63185 6 1.33337 6.29848 1.33337 6.66667V7.33333C1.33337 7.54317 1.43217 7.74076 1.60004 7.86667L2.66671 8.66667" stroke="white" stroke-linecap="round" stroke-linejoin="round" />
-                                <path d="M13 3.33325H3" stroke="white" stroke-linecap="round" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_96_1603">
-                                    <rect width="16" height="16" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                        <Typography variant='span' component='span'>
-                            965 mi
-                        </Typography>
-                    </Box> */}
                         </Box>
                         <Box className='content'>
                             <Box className='date-location'>
