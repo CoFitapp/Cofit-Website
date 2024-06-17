@@ -16,7 +16,7 @@ const MapComponent = ({ onLocationChange, inputProps }) => {
     };
 
     loadGoogleMapsApi({
-      key: 'AIzaSyBpVX6Xl4OEftECYrN-wauMw7dpUyl6GiI',
+      key: process.env.REACT_APP_GOOGLE_API_KEY,
       libraries: ['places']
     }).then(initAutocomplete);
   }, [onLocationChange]);
@@ -26,7 +26,7 @@ const MapComponent = ({ onLocationChange, inputProps }) => {
       <input
         type="text"
         ref={inputRef}
-        placeholder="Search for a place"
+        placeholder="Enter a Location"
         onChange={(event) => onLocationChange(event.target.value)}
         {...inputProps}
       />

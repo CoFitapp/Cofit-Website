@@ -3075,3 +3075,6 @@ input.pac-target-input {
 .Autocomplete:focus {
   outline: none !important;
 }
+.pac-target-input{
+  font-size: 15px;
+}
