@@ -55,12 +55,12 @@ export default function MenuBar() {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/about-us">
+            <ListItemButton component={Link} to="/">
               <ListItemText primary="About" />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/news-articles">
+            <ListItemButton component={Link} to="/">
               <ListItemText primary="Blog" />
             </ListItemButton>
           </ListItem>

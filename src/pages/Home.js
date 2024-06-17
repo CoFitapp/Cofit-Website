@@ -148,7 +148,7 @@ console.log("eventData Home", eventData)
                                     </Typography>
                                     /
                                     <Typography variant='span' component='span'>1
-                                        {/* {props.totalPages} */}
+                                        {props.totalPages}
                                     </Typography>
                                 </Typography>
 
@@ -161,8 +161,8 @@ console.log("eventData Home", eventData)
                                         props.handlePage("next");
                                     }}
                                     style={nextButtonStyle}
-                                    // disabled={props.currentPage === props.totalPages}
-                                    disabled={props.currentPage === 1}
+                                    disabled={props.currentPage === props.totalPages}
+                                    // disabled={props.currentPage === 1}
 
                                 >
                                     Next

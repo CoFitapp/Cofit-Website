@@ -48,7 +48,7 @@ const SingleEvents = ({ eventData, setEventData, currentPage, pagination, search
                 const response = await axios.post('/api/get-event', { page, limit, offset, searchQuery });
                 setEventData(response.data);
                 setEventData2(response.data);
-
+                console.log("response.data",response.data)
                 SetTotalPages(response.data.totalPages);
 
                 let eventsToDisplay;
@@ -77,11 +77,11 @@ const SingleEvents = ({ eventData, setEventData, currentPage, pagination, search
         };
     }, [currentPage, limit, pagination, searchQuery, category, SetTotalPages]);
 
-    console.log("eventData2 single", eventData2);
+    console.log("eventData2 single", eventData);
 
     const filteredEvents = Array.isArray(eventData) ? eventData.filter((event) => {
-        const titleMatch = event.events.title && event.events.title.toLowerCase().includes((searchQuery || '').toLowerCase());
-        const descriptionMatch = event.events.description && event.events.description.toLowerCase().includes((searchQuery || '').toLowerCase());
+        const titleMatch = event?.title && event?.title.toLowerCase().includes((searchQuery || '').toLowerCase());
+        const descriptionMatch = event?.description && event?.description.toLowerCase().includes((searchQuery || '').toLowerCase());
         return titleMatch || descriptionMatch;
     }) : [];
 
@@ -91,11 +91,11 @@ const SingleEvents = ({ eventData, setEventData, currentPage, pagination, search
         console.log(`/api/event-details/${slug}`);
         axios.get(`/api/event-details/${slug}`)
             .then(response => {
-                const eventData = response.data.events; // Corrected: response.data.events
+                const eventData = response?.data?.events; // Corrected: response.data.events
                 let eventSlug = eventData.slug; // Corrected: eventData.slug
 
                 if (!eventSlug) {
-                    eventSlug = eventData.title
+                    eventSlug = eventData?.title
                         .toLowerCase()
                         .replace(/[^a-z0-9]/g, '-')
                         .replace(/-{2,}/g, '-')
@@ -104,33 +104,42 @@ const SingleEvents = ({ eventData, setEventData, currentPage, pagination, search
                 }
 
                 console.log("slug new", eventSlug);
-                // navigate(`/single-event/${eventSlug}`, { state: { eventData } });
+                navigate(`/single-event/${eventSlug}`);
 
             })
             .catch(error => {
                 console.error('Error fetching event details:', error);
             });
-        console.log("eventData new", eventData)
+        console.log("eventData new", filteredEvents)
     };
 
     const getImageUrl = (event) => {
-        if (!event.events.image) {
+        if (!event?.image) {
             return location.pathname.includes('/single-event/') ? '../images/CoFit-Image-Not-Found-1.jpg' : 'images/CoFit-Image-Not-Found-1.jpg';
         }
-
-        let imageUrl = event.events.image;
-
-        imageUrl = imageUrl.replace('https://cofitapp.com/', '');
-        console.log("imageUrl", imageUrl)
+    
+        let imageUrl = event?.image;
+    
+        // Replace occurrences of 'https://api.cofitapp.com/' with 'https://cofitapp.com/'
+        imageUrl = imageUrl.replace('https://api.cofitapp.com/', 'https://cofitapp.com/');
+    
+        console.log("imageUrl", imageUrl);
+    
+        // Check if the modified URL doesn't start with 'https://'
         if (!imageUrl.startsWith('https://')) {
+            // If not, prepend 'https://cofitapp.com/' to the URL
             imageUrl = 'https://cofitapp.com/' + imageUrl;
         }
-
+    
         console.log("imageUrl", imageUrl);
+    
         return imageUrl;
     };
-
-    console.log("eventdata+*+&+*", eventData)
+    
+    filteredEvents.map(event => {
+        console.log("event data:", event);
+    });
+    
     // console.log("image+*+&+*", eventData.event.events.image)
 
     // eventData.forEach(event => {
@@ -153,15 +162,15 @@ const SingleEvents = ({ eventData, setEventData, currentPage, pagination, search
 
             ) : (
                 filteredEvents.map(event => (
-                    <Box key={event.events.id} className='event-box box'>
+                    <Box key={event.id} className='event-box box'>
 
                         <Box className='image'>
-                            {event.events.image ? (
-                                <Link to={`/single-event/${event.events.slug || event.events.title?.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-{2,}/g, '-').replace(/^-|-$/g, '')}`} onClick={() => handleTitleClick(event.id, event.events.slug, event.slug)}>
+                            {event?.image ? (
+                                <Link to={`/single-event/${event?.slug || event?.title?.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-{2,}/g, '-').replace(/^-|-$/g, '')}`} onClick={() => handleTitleClick(event?.id, event?.slug, event.slug)}>
                                     <img src={getImageUrl(event)} alt='' />
                                 </Link>
                             ) : (
-                                <Link to={`/single-event/${event.events.slug || event.events.title?.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-{2,}/g, '-').replace(/^-|-$/g, '')}`} onClick={() => handleTitleClick(event.id, event.events.slug, event.slug)}>
+                                <Link to={`/single-event/${event?.slug || event?.title?.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-{2,}/g, '-').replace(/^-|-$/g, '')}`} onClick={() => handleTitleClick(event?.id, event?.slug, event.slug)}>
                                     <a href="#back-events">
                                         <img
                                             src={getImageUrl(event)}
@@ -180,15 +189,15 @@ const SingleEvents = ({ eventData, setEventData, currentPage, pagination, search
                                         <path d="M2.5 5.5H13.5" stroke="#E25F3C" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                     <Typography variant='span' component='span' className="date">
-                                        {event?.events.date?.start_date}, {currentYear}
+                                        {event?.date?.start_date}, {currentYear}
                                     </Typography>
                                 </Box>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="2" viewBox="0 0 16 2" fill="none">
                                     <path d="M0 1H16" stroke="#CBD7EA" />
                                 </svg>
                                 <Box className='location'>
-                                    {event?.events.event_location_map && event?.events.event_location_map.link ? (
-                                        <a href={event?.events.event_location_map.link} target="_blank" rel="noopener noreferrer">
+                                    {event?.event_location_map && event?.event_location_map.link ? (
+                                        <a href={event?.event_location_map.link} target="_blank" rel="noopener noreferrer">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                 <path d="M8 8.5C9.10457 8.5 10 7.60457 10 6.5C10 5.39543 9.10457 4.5 8 4.5C6.89543 4.5 6 5.39543 6 6.5C6 7.60457 6.89543 8.5 8 8.5Z" stroke="#E25F3C" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
                                                 <path d="M13 6.5C13 11 8 14.5 8 14.5C8 14.5 3 11 3 6.5C3 5.17392 3.52678 3.90215 4.46447 2.96447C5.40215 2.02678 6.67392 1.5 8 1.5C9.32608 1.5 10.5979 2.02678 11.5355 2.96447C12.4732 3.90215 13 5.17392 13 6.5V6.5Z" stroke="#E25F3C" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
@@ -201,15 +210,15 @@ const SingleEvents = ({ eventData, setEventData, currentPage, pagination, search
                                         </svg>
                                     )}
                                     <Typography variant='span' component='span'>
-                                        {event.events.address &&
-                                            event.events.address
+                                        {event?.address &&
+                                            event?.address
                                                 .toString()
                                                 .match(/\S+/g)
                                                 ?.slice(0, 1)
                                                 .join(' ')
                                         }
-                                        {event.events.address &&
-                                            event.events.address
+                                        {event?.address &&
+                                            event?.address
                                                 .toString()
                                                 .match(/\S+/g)
                                                 ?.length > 2 && '...'}
@@ -222,15 +231,15 @@ const SingleEvents = ({ eventData, setEventData, currentPage, pagination, search
                                 </Box>
                             </Box>
                             <Box className='title-des'>
-                                <Link to={`/single-event/${event.slug || event.events.title?.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-{2,}/g, '-').replace(/^-|-$/g, '')}`} onClick={() => handleTitleClick(event.id)}>
+                                <Link to={`/single-event/${event?.slug || event?.title?.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-{2,}/g, '-').replace(/^-|-$/g, '')}`} onClick={() => handleTitleClick(event.id)}>
 
 
                                     <Typography variant='h3' component='h3' className='title'>
-                                        {event.events.title}
+                                        {event?.title}
                                     </Typography>
                                 </Link>
                                 <Typography variant='p' component='p' className='description'>
-                                    {event.events.description}
+                                    {event?.description}
                                 </Typography>
                             </Box>
                         </Box>

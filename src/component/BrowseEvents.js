@@ -14,27 +14,27 @@ import 'slick-carousel/slick/slick-theme.css'; import Paper from '@mui/material/
 import { Helmet } from "react-helmet";
 
 function EventCarouselItem({ event, handleTitleClick, eventData }) {
-  console.log("event carou", event.events.venue.name);
+  console.log("event carou", event?.venue?.name);
   // Check if event.location is defined before splitting
-  const firstWordLocation = event.events.venue.name ? event.events.venue.name.split(' ').slice(0, 2).join(' ') : '';
+  const firstWordLocation = event?.venue?.name ? event?.venue?.name.split(' ').slice(0, 2).join(' ') : '';
 
   return (
     <Paper>
       <Box className='event-box event evnt'>
         <Box className='image1'>
-          <Link to={`/single-event/${event.events.slug}`} onClick={() => handleTitleClick(event.id)}>
-            <img src={event.events.image} alt='' />
+          <Link to={`/single-event/${event?.slug}`} onClick={() => handleTitleClick(event.id)}>
+          <img src={event?.image ? event.image : '/images/CoFit-Image-Not-Found-1.jpg'} alt='' />
           </Link>
         </Box>
         <Box className='content'>
           <Box className='title-des'>
-            <Link to={`/single-event/${event.events.slug}`} onClick={() => handleTitleClick(event.id)} className='title carou'>
+            <Link to={`/single-event/${event?.slug}`} onClick={() => handleTitleClick(event.id)} className='title carou'>
               <Typography variant='a' component='a' className='title carou'>
-                {event.events.title}
+                {event?.title}
               </Typography>
             </Link>
             <Typography variant='p' component='p' className='description carous'>
-              {event.events.description}
+              {event?.description}
             </Typography>
           </Box>
           <Box className='date-location'>
@@ -46,7 +46,7 @@ function EventCarouselItem({ event, handleTitleClick, eventData }) {
                 <path d="M2.5 5.5H13.5" stroke="#E25F3C" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               <Typography variant='span' component='span'>
-                {event.events.date.when}
+                {event?.date.when}
               </Typography>
             </Box>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="2" viewBox="0 0 16 2" fill="none">
@@ -63,7 +63,7 @@ function EventCarouselItem({ event, handleTitleClick, eventData }) {
             </Box>
           </Box>
           <Box className='explore-event'>
-            <Link to={`/single-event/${event.events.slug}`} onClick={() => handleTitleClick(event.id)} className='title link-title' style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to={`/single-event/${event?.slug}`} onClick={() => handleTitleClick(event.id)} className='title link-title' style={{ textDecoration: 'none', color: 'inherit' }}>
               Explore event
             </Link>
 
@@ -124,7 +124,8 @@ function EventCarousel({ events, sliderRef, handleNext, handlePrev, handleTitleC
     <>
 
       <Slider {...settings} ref={sliderRef}>
-
+     
+  
         {events.map((event, index) => (
           <EventCarouselItem key={index} event={event} handleTitleClick={handleTitleClick} />
         ))}
@@ -167,6 +168,7 @@ export default function BrowseEvents(props) {
   const handlePrev = () => {
     sliderRef.current?.slickPrev();
   };
+
   const handleTitleClick = (id, slug) => {
     console.log(`/api/event-details/${slug}`);
     axios.get(`/api/event-details/${slug}`)
@@ -197,26 +199,22 @@ export default function BrowseEvents(props) {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.post('/api/get-event');
-        console.log("response", response);
-
-        // Log the entire response object to inspect its structure
-        console.log("response data", response.data.events);
-
-        // Access the events data
-        const eventDataResponse = response.data.events; // Check the structure of response.data
-
-        if (eventDataResponse) {
-          setEvents(eventDataResponse);
-          setEventData(eventDataResponse);
-        }
+        const response = await axios.post('/api/get-event', {
+          city_name: 'Chicago', 
+          page: 1 
+        });
+        console.log("response", response)
+        const eventDataResponse = response.data.slice(0, 5); // Only take the first 5 events
+        setEvents(eventDataResponse);
       } catch (error) {
         console.error('Error fetching events:', error);
       }
     };
     fetchEvents();
   }, []);
-  console.log("events browse", events)
+  
+  
+
 
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
@@ -251,6 +249,7 @@ export default function BrowseEvents(props) {
       borderRadius: '4px',
       border: '1px solid #1C1F23',
     };
+
   console.log("eventData", eventData)
   return (
     <React.Fragment>
@@ -311,15 +310,15 @@ export default function BrowseEvents(props) {
                   </Typography>
                   /
                   <Typography variant='span' component='span'>1
-                    {/* {props.totalPages} */}
+                    {props.totalPages}
                   </Typography>
                 </Typography>
 
                 <Link to="/browse-events">
                   <Button variant="contained" className='custom-buttn main next' onClick={() => { scrollToSection('single-events'); props.handlePage("next"); }}
                     style={nextButtonStyle}
-                    // disabled={props.currentPage === props.totalPages}
-                    disabled={props.currentPage === 1}
+                    disabled={props.currentPage === props.totalPages}
+                    // disabled={props.currentPage === 1}
                   >
                     Next
                   </Button>

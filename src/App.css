@@ -207,6 +207,10 @@ header.header_main .MuiToolbar-root {
   display: flex;
   flex-direction: column;
   row-gap: 24px;
+  
+}
+.event-box .event .evnt{
+  max-width: 50%;
 }
 .event-box.box .content{
   padding: 24px;
@@ -3064,4 +3068,10 @@ button.custom-buttn.main.w-bg.new-pre {
 
 .title-des a {
   text-decoration: none;
+}
+input.pac-target-input {
+  border: none;
+}
+.Autocomplete:focus {
+  outline: none !important;
 }

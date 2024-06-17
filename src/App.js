@@ -79,13 +79,13 @@ function App() {
     <BrowserRouter>
       <AuthLayout>
         <Routes>
-          {/* <Route path="/home" element={<Home handlePage={handlePage} currentPage={currentPage} pagination={pagination} SetTotalPages={SetTotalPages} totalPages={totalPages}/>}></Route> 
-          <Route index element={<SubscribePage />}></Route> */}
-          <Route index element={<Home handlePage={handlePage} currentPage={currentPage} pagination={pagination} SetTotalPages={SetTotalPages} totalPages={totalPages} />}></Route>
+          {/* <Route path="/home" element={<Home handlePage={handlePage} currentPage={currentPage} pagination={pagination} SetTotalPages={SetTotalPages} totalPages={totalPages}/>}></Route> */}
+          <Route index element={<SubscribePage />}></Route> 
+          <Route path="/home" element={<Home handlePage={handlePage} currentPage={currentPage} pagination={pagination} SetTotalPages={SetTotalPages} totalPages={totalPages} />}></Route> 
           <Route path="/single-event/:slug" element={<SingleEvent handlePage={handlePage} currentPage={currentPage} pagination={pagination} SetTotalPages={SetTotalPages} totalPages={totalPages}  />} />
           <Route path="/browse-events" element={<BrowseEvents handlePage={handlePage} currentPage={currentPage} pagination={pagination} SetTotalPages={SetTotalPages} totalPages={totalPages} paginateState={paginateState} />} />
-          <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/news-articles" element={<NewsArticlePage />} />
+          <Route path="/about-us" element={<AboutUs />} /> 
+          <Route path="/news-articles" element={<NewsArticlePage />} /> 
           <Route path="/term-conditions" element={<TermsConditions />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/subscribe-page" element={<SubscribePage />} />

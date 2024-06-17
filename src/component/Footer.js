@@ -18,7 +18,7 @@ const scrollToTop = () => {
 const FooterLink = React.forwardRef((props, ref) => <Link to="/" {...props} ref={ref} onClick={scrollToTop} />);
 const TermLink = React.forwardRef((props, ref) => <Link to="/term-conditions" {...props} ref={ref} onClick={scrollToTop} />);
 const PrivacyLink = React.forwardRef((props, ref) => <Link to="/privacy-policy" {...props} ref={ref} onClick={scrollToTop} />);
-const AboutLink = React.forwardRef((props, ref) => <Link to="/about-us" {...props} ref={ref} onClick={scrollToTop} />);
+// const AboutLink = React.forwardRef((props, ref) => <Link to="/about-us" {...props} ref={ref} onClick={scrollToTop} />);
 
 export default function Footer() {
     // useEffect(() => {
@@ -74,7 +74,7 @@ export default function Footer() {
                                                 </ListItemButton>
                                             </ListItem>
                                             <ListItem disablePadding>
-                                                <ListItemButton component={AboutLink}>
+                                                <ListItemButton>
                                                     <ListItemText primary="About" />
                                                 </ListItemButton>
                                             </ListItem>
@@ -83,7 +83,7 @@ export default function Footer() {
                                                     <ListItemText primary="Event" />
                                                 </ListItemButton>
                                             </ListItem>
-                                            <ListItem disablePadding>
+                                            {/* <ListItem disablePadding>
                                                 <ListItemButton>
                                                     <ListItemText primary="Event single" />
                                                 </ListItemButton>
@@ -102,7 +102,7 @@ export default function Footer() {
                                                 <ListItemButton>
                                                     <ListItemText primary="Submit a featured event" />
                                                 </ListItemButton>
-                                            </ListItem>
+                                            </ListItem> */}
                                         </List>
                                     </nav>
                                 </Box>
@@ -144,7 +144,7 @@ export default function Footer() {
                                                     <ListItemText primary="Blog" />
                                                 </ListItemButton>
                                             </ListItem>
-                                            <ListItem disablePadding>
+                                            {/* <ListItem disablePadding>
                                                 <ListItemButton>
                                                     <ListItemText primary="Blog category" />
                                                 </ListItemButton>
@@ -158,7 +158,7 @@ export default function Footer() {
                                             <ListItemButton component={FooterLink}>
                                                 <ListItemText primary="Coming soon" />
                                             </ListItemButton>
-                                            </ListItem>
+                                            </ListItem> */}
                                         </List>
                                     </nav>
                                 </Box>
@@ -300,12 +300,12 @@ export default function Footer() {
                                 <nav>
                                     <List>
                                         <ListItem disablePadding>
-                                            <ListItemButton component={TermLink}>
+                                            <ListItemButton >
                                                 <ListItemText primary="Terms of Service" />
                                             </ListItemButton>
                                         </ListItem>
                                         <ListItem disablePadding>
-                                            <ListItemButton component={PrivacyLink}>
+                                            <ListItemButton >
                                                 <ListItemText primary="Privacy Policy" />
                                             </ListItemButton>
                                         </ListItem>
